@@ -1,0 +1,281 @@
+filetype plugin indent on    " required
+set mouse=a
+call plug#begin('~/.vim/plugged')
+" Make sure you use single quotes
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'Shougo/vimfiler.vim'
+Plug 'Shougo/unite.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'srstevenson/vim-picker'
+Plug 'haya14busa/incsearch.vim'
+Plug 'wellle/context.vim'
+Plug 'slim-template/vim-slim'
+Plug 'tpope/vim-fugitive'
+"Plug 'liuchengxu/space-vim-dark'
+Plug 'whatyouhide/vim-gotham'
+Plug 'arcticicestudio/nord-vim'
+"Plug 'mswift42/vim-themes'
+"Plug 'rainglow/vim'
+
+Plug 'mhinz/vim-startify'
+Plug 'hari-rangarajan/CCTree'
+Plug 'vivien/vim-linux-coding-style'
+Plug 'majutsushi/tagbar'
+
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+Plug 'rust-lang/rust.vim'
+
+Plug 'dense-analysis/ale'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'roxma/nvim-yarp'
+Plug 'liuchengxu/vista.vim'
+Plug 'rhysd/git-messenger.vim'
+Plug 'dag/vim-fish'
+Plug 'rhysd/vim-grammarous'
+
+" Initialize plugin system
+call plug#end()
+" TextEdit might fail if hidden is not set.
+set hidden
+
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings using CoCList:
+" Show all diagnostics.
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+"popup menu color
+highlight Pmenu ctermbg=gray guibg=gray
+
+let g:startify_lists = [
+	\ { 'type': 'dir',       'header': ['   Most Recently Used Files '. getcwd()] },
+	\ { 'type': 'files',     'header': ['   Most Recently Used Files']            },
+	\ { 'type': 'sessions',  'header': ['   Sessions']       },
+	\ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+	\ { 'type': 'commands',  'header': ['   Commands']       },
+	\ ]
+let g:startify_enable_special      = 0
+let g:startify_files_number        = 8
+let g:startify_relative_path       = 1
+"let g:startify_change_to_dir       = 0
+"let g:startify_update_oldfiles     = 1
+"let g:startify_session_autoload    = 1
+"let g:startify_session_persistence = 1
+
+let g:startify_skiplist = [
+	\ 'COMMIT_EDITMSG',
+        \ 'bundle/.*/doc',
+        \ '/data/repo/neovim/runtime/doc',
+        \ '/Users/mhi/local/vim/share/vim/vim74/doc',
+        \ ]
+
+let g:startify_bookmarks = [
+        \ { 'c': '~/.vim/vimrc' },
+        \ ]
+
+let g:startify_custom_header =
+	\ startify#pad(split(system('task|boxed'), '\n'))
+let g:startify_custom_footer =
+	\ ['', "   Vim is charityware. Please read ':help uganda'.", '']
+
+hi StartifyBracket ctermfg=240
+hi StartifyFile    ctermfg=147
+hi StartifyFooter  ctermfg=240
+hi StartifyHeader  ctermfg=114
+hi StartifyNumber  ctermfg=215
+hi StartifyPath    ctermfg=245
+hi StartifySlash   ctermfg=240
+hi StartifySpecial ctermfg=240
+
+"vimfiler settings
+let g:vimfiler_as_default_explorer = 1
+call vimfiler#custom#profile('default', 'context',{'direction' : 'rightbelow'})
+autocmd VimEnter *
+	\   if !argc()
+	\ |   Startify
+        \ |   VimFilerExplorer
+        \ |   wincmd w
+        \ | endif
+
+set showtabline=2
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+let g:indentLine_color_term = 239
+let g:indentLine_color_gui = '#504945'
+"let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_char = '┊'
+"let g:indentLine_concealcursor = 'niv'
+"let g:indentLine_conceallevel = 2
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'vimfiler', 'json']
+colorscheme gotham256
+hi Comment cterm=italic
+
+set autoindent smartindent              " turn on auto/smart indenting
+set smarttab                            " make <tab> and <backspace> smarter
+set backspace=eol,start,indent          " allow backspacing over indent, eol, & start
+let g:linuxsty_patterns = [ "/usr/src/", "/linux", "/home/nirmoy/devel/linux/linux/"]
+
+autocmd BufWritePre * %s/\s\+$//e
+"remember prev cursor
+autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+nmap <F8> :TagbarToggle<CR>
+
+set tags=tags,./tags;
+set hlsearch
+set noswapfile
+set laststatus=2
+
+set undodir=~/.vimundo
+set undofile
+set wildmenu
+
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
+augroup END
