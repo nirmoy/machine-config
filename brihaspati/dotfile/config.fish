@@ -11,6 +11,19 @@ abbr -a gc 'git checkout'
 abbr -a vimdiff 'nvim -d'
 abbr journal-clean 'journalctl --vacuum-time=2d'
 abbr -a t task
+
+function agrep
+	grep $argv drivers/gpu/drm/amd/amdgpu/* -R
+end
+function gitfetchamd
+	cd ~/devel/linux/linux
+	git fetch  brahma amd-staging-drm-next
+	cd -
+end
+function dgrep
+	grep $argv drivers/gpu/drm/* -R
+end
+
 if command -v xcp > /dev/null
 	abbr cp xcp
 end
@@ -43,7 +56,7 @@ source ~/.config/fish/functions/fish_prompt.fish
 source ~/.config/fish/functions/fish_title.fish
 source ~/.config/fish/completions/docker.fish
 
-set -g theme_display_git no
+set -g theme_display_git yes
 set -g theme_display_user ssh
 set -g theme_display_hostname ssh
 set -g theme_display_sudo_user yes

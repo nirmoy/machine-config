@@ -5,24 +5,27 @@ set $left h
 set $down j
 set $up k
 set $right l
+
 # Your preferred terminal emulator
 set $term kitty
-set $menu dmenu_path |rofi -show run
+set $menu dmenu_path |rofi -show run -theme Arc-Dark
 
 set $screenshot grim ~/Pictures/screenshots/scrn-$(date +"%Y-%m-%d-%H-%M-%S").png
 set $screenclip slurp | grim -g - ~/Pictures/screenshots/scrn-$(date +"%Y-%m-%d-%H-%M-%S").png
 
-set $FONT "SF Pro Text Regular 9"
+set $FONT "Fira Code"
 set $GTK_THEME "Ayu-Mirage-Dark"
 set $GTK_ICON_THEME "Papirus-Dark"
 set $GTK_SCHEMA "org.gnome.desktop.interface"
 
+exec_always {
 # Set GTK3+ theme
-exec gsettings set $GTK_SCHEMA gtk-theme "$GTK_THEME"
-exec gsettings set $GTK_SCHEMA icon-theme "$GTK_ICON_THEME"
-exec gsettings set $GTK_SCHEMA font-name "$FONT"
-exec gsettings set $GTK_SCHEMA document-font-name "$FONT"
-
+	gsettings set $GTK_SCHEMA gtk-theme "$GTK_THEME"
+	gsettings set $GTK_SCHEMA gtk-key-theme "$GTK_THEME"
+	gsettings set $GTK_SCHEMA icon-theme "$GTK_ICON_THEME"
+	gsettings set $GTK_SCHEMA font-name "$FONT"
+	gsettings set $GTK_SCHEMA document-font-name "$FONT"
+}
 
 for_window [class=".*"] split vertical
 for_window [app_id=".*"] split vertical
@@ -31,16 +34,22 @@ exec swaymsg "exec hexchat; exec teams"
 exec swaymsg "exec kitty; exec google-chrome;"
 exec swaymsg "exec thunderbird;"
 exec --no-startup-id sway-time-tracker
-exec --no-startup-id mako
+exec --no-startup-id mako --default-timeout 10000
 exec --no-startup-id waybar
 
+set $fast_lock ~/.cargo/bin/swaylock-blur1
+set $lockimage "/tmp/sway_lock.png"
+set $slow_lock "grim  $lockimage; convert -scale 10% -blur 0x2.5 -resize 1000%  $lockimage $lockimage; swaylock -i $lockimage"
+set $lock exec bash -c '( [ -f $fast_lock ] && $fast_lock ) || bash -c $slow_lock'
 exec swayidle -w \
-         timeout 300 'exec pkill sway-time-tracker; swaylock -f -c 000000' \
+         timeout 3 'exec pkill sway-time-tracker; $lock' \
          timeout 600 'swaymsg "output * dpms off"' \
                resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+         before-sleep '$lock'
 # Select window with rofi
-bindsym Alt+tab exec swaymsg \[con_id=$(swaymsg -t get_tree |  jq -r '.nodes[1].nodes[].nodes[] | .. | (.id|tostring) + " " + .name?' | grep -e "[0-9]* ."| rofi -dmenu -i | awk '{print $1}')] focus
+bindsym Alt+tab exec swaymsg \[con_id=$(swaymsg -t get_tree |  \
+	jq -r '.nodes[1].nodes[].nodes[] | .. | (.id|tostring) + " " + .name?' | \
+	grep -e "[0-9]* ."| rofi -dmenu -i -theme Arc-Dark | awk '{print $1}')] focus
 
 
 assign '[class="Google-chrome"]' workspace 1
@@ -62,7 +71,7 @@ assign '[title="Counter-Strike: Global Offensive - OpenGL"]' workspace 5
 
     # Start your launcher
     bindsym $mod+d exec $menu
-    bindsym $mod+Alt+l exec swaylock
+    bindsym $mod+Alt+l $lock
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -195,5 +204,8 @@ bindsym $mod+r mode "resize"
 
 for_window [class=".*"] split toggle
 for_window [app_id=".*"] split toggle
+
+default_border none
+gaps inner 8
 
 include /etc/sway/config.d/*
