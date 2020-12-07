@@ -7,27 +7,38 @@ abbr -a cr 'cargo run'
 abbr -a e nvim
 abbr -a m make
 abbr -a g git
+abbr -a gcl git clone
 abbr -a gc 'git checkout'
 abbr -a vimdiff 'nvim -d'
 abbr journal-clean 'journalctl --vacuum-time=2d'
 abbr -a t task
 
+if command -v rg > /dev/null
+	abbr -a grep rg
+end
 function agrep
-	grep $argv drivers/gpu/drm/amd/amdgpu/* -R
+	vgrep "$argv" ~/devel/linux/linux/drivers/gpu/drm/amd/amdgpu/
 end
+
 function gitfetchamd
-	cd ~/devel/linux/linux
-	git fetch  brahma amd-staging-drm-next
-	cd -
+	git -C /home/nirmoy/devel/linux/linux/ fetch brahma amd-staging-drm-next
 end
+
 function dgrep
-	grep $argv drivers/gpu/drm/* -R
+	vgrep $argv drivers/gpu/drm/*
 end
 
 if command -v xcp > /dev/null
 	abbr cp xcp
 end
 
+function ncp
+	if test (count $argv) -lt 4; or test $argv[1] = "--help"
+		echo "passed 4 args"
+	else
+		echo 'tar  cf - $argv[1] | pigz | ssh  $argv[2]@$argv[3] "pigz -d| tar -xC $argv[4]"'
+	end
+end
 
 set PATH $HOME/.cargo/bin ~/.local/bin $PATH
 

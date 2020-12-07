@@ -37,6 +37,8 @@ Window Manager
 ==============
 ```
 sudo zypper in -y fontawesome-fonts fontawesome-fonts-web sway swaylock rofi mako waybar
+#waybar
+sudo zypper in -y libnl-devel libpulse-devel sndio-devel libappindicator-devel gobject-introspection-devel libdbusmenu-gtk3-devel gnome-nettool
 ```
 Task management
 ===============
@@ -57,3 +59,11 @@ meson build
 ninja -C build
 sudo ninja -C build install
 ```
+
+Setup WM from server
+====================
+```
+zypper in -y pavucontrol pulseaudio NetworkManager chromium hexchat \
+	thunderbird grim swaylock pamixer slurp
+```
+

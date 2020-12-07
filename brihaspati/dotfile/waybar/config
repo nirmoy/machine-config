@@ -6,61 +6,32 @@
 
 	"modules-left": [
 		"sway/workspaces",
-		"custom/right-arrow-dark"
+		"sway/mode",
+		"wlr/taskbar"
 	],
 	"modules-center": [
-		"custom/left-arrow-dark",
 		"clock#1",
-		"custom/left-arrow-light",
-		"custom/left-arrow-dark",
 		"clock#2",
-		"custom/right-arrow-dark",
-		"custom/right-arrow-light",
 		"clock#3",
-		"custom/right-arrow-dark"
+		"sway/window"
 	],
 	"modules-right": [
-		"custom/left-arrow-dark",
 		"pulseaudio",
-		"custom/left-arrow-light",
-		"custom/left-arrow-dark",
 		"network",
-		"custom/left-arrow-light",
-		"custom/left-arrow-dark",
 		"memory",
-		"custom/left-arrow-light",
-		"custom/left-arrow-dark",
 		"cpu",
-		"custom/left-arrow-light",
-		"custom/left-arrow-dark",
 		"disk",
-		"custom/left-arrow-light",
-		"custom/left-arrow-dark",
 		"tray"
 	],
-
-	"custom/left-arrow-dark": {
-		"format": "",
-		"tooltip": false
-	},
-	"custom/left-arrow-light": {
-		"format": "",
-		"tooltip": false
-	},
-	"custom/right-arrow-dark": {
-		"format": "",
-		"tooltip": false
-	},
-	"custom/right-arrow-light": {
-		"format": "",
-		"tooltip": false
-	},
 
 	"sway/workspaces": {
 		"disable-scroll": true,
 		"format": "{name}"
 	},
-
+	"sway/window": {
+	    "max-length": 10,
+	    "tooltip": false
+	},
 	"clock#1": {
 		"format": "{:%a}",
 		"tooltip": false
@@ -111,5 +82,15 @@
 	},
 	"tray": {
 		"icon-size": 20
+	},
+
+	"wlr/taskbar": {
+  		"format": "{icon}",
+		"icon-size": 14,
+    		"icon-theme": "Numix-Circle",
+    		"tooltip-format": "{title}",
+    		"on-click": "activate",
+    	"	on-click-middle": "close"
 	}
+
 }
