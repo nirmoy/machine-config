@@ -1,15 +1,14 @@
-alias vim='nvim'
+alias nvim='vim'
 alias git-remove-last='git reset --hard HEAD~1'
-abbr -a vim nvim
+abbr -a nvim vim
 abbr -a c cargo
 abbr -a cb 'cargo build'
 abbr -a cr 'cargo run'
-abbr -a e nvim
+abbr -a e vim
 abbr -a m make
 abbr -a g git
 abbr -a gcl git clone
 abbr -a gc 'git checkout'
-abbr -a vimdiff 'nvim -d'
 abbr journal-clean 'journalctl --vacuum-time=2d'
 abbr -a t task
 
@@ -26,6 +25,40 @@ end
 
 function dgrep
 	vgrep $argv drivers/gpu/drm/*
+end
+
+function hex_to_bin
+	echo "ibase=16; obase=2; "(string upper $argv)"" | bc
+end
+
+function hex_to_dec
+	echo "ibase=16; obase=A; "(string upper $argv)"" | bc
+end
+
+
+function bin_to_hex
+	echo "ibase=2; obase=16; $argv" | bc
+end
+
+
+function bin_to_dec
+	echo "ibase=2;obase=A; $argv"|bc
+end
+
+function dec_to_bin
+	echo "ibase=A;obase=2; $argv"|bc
+end
+
+function dec_to_hex
+	echo "ibase=A;obase=16; $argv"|bc
+end
+
+
+
+
+function bt
+	bluetoothctl power on
+	sudo bluetoothctl connect E8:07:BF:36:61:D0
 end
 
 if command -v xcp > /dev/null

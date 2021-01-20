@@ -7,10 +7,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite.vim'
 Plug 'Yggdroot/indentLine'
-Plug 'srstevenson/vim-picker'
-Plug 'haya14busa/incsearch.vim'
 Plug 'wellle/context.vim'
-Plug 'slim-template/vim-slim'
 Plug 'tpope/vim-fugitive'
 "Plug 'liuchengxu/space-vim-dark'
 Plug 'whatyouhide/vim-gotham'
@@ -18,7 +15,6 @@ Plug 'arcticicestudio/nord-vim'
 "Plug 'mswift42/vim-themes'
 "Plug 'rainglow/vim'
 Plug 'mhinz/vim-signify'
-Plug 'tpope/vim-rhubarb'
 
 Plug 'mhinz/vim-startify'
 Plug 'hari-rangarajan/CCTree'
@@ -35,10 +31,7 @@ Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-path'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+Plug 'Shougo/vimproc.vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'rhysd/git-messenger.vim'
 Plug 'dag/vim-fish'
@@ -48,20 +41,21 @@ Plug 'rhysd/vim-grammarous'
 call plug#end()
 
 " enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
+"autocmd BufEnter * call ncm2#enable_for_buffer()
 
 " IMPORTANT: :help Ncm2PopupOpen for more information
 set completeopt=noinsert,menuone,noselect
 
 " Required for operations modifying multiple buffers like rename.
 set hidden
-
+"omni completion freeze
+let g:tsuquyomi_use_vimproc=1
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'python': ['/usr/local/bin/pyls'],
     \ }
 let g:LanguageClient_diagnosticsSignsMax=0
-let g:LanguageClient_diagnosticsEnable=1
+let g:LanguageClient_diagnosticsEnable=0
 let g:LanguageClient_diagnosticsList="Quickfix"
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " Or map each action separately
@@ -69,6 +63,9 @@ nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 "popup menu color
 highlight Pmenu ctermbg=gray guibg=gray
+"transparent
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
 
 let g:startify_lists = [
 	\ { 'type': 'dir',       'header': ['   Most Recently Used Files '. getcwd()] },

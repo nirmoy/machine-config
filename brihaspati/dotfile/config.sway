@@ -204,10 +204,11 @@ bindsym $mod+Ctrl+less move workspace to output left
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-#bar {
-#    position top
-#    status_command waybar
-#}
+bar {
+    id 0
+    swaybar_command waybar
+    mode hide
+}
 
 
 assign [class="Hexchat"] workspace 3
@@ -216,7 +217,8 @@ assign [app_id = "thunderbird"] workspace 2
 assign [class = "Steam"] workspace 4
 assign [class = "Microsoft Teams - Preview"] workspace 3
 assign [class = "Hexchat"] workspace 3
-assign [title = "Counter-Strike: Global Offensive - OpenGL"] workspace 5
+assign [title = "Counter-Strike: Global Offensive - OpenGL"] workspace 4
+assign [title = "Dota 2"] workspace 4
 
 output HDMI-A-1 transform 270 position 0 0
 workspace 1 output DP-2
@@ -230,7 +232,6 @@ exec  chromium
 exec  teams
 exec  thunderbird
 exec  hexchat
-exec  waybar
 exec  mako
 
 bindsym Print exec  $screenshot
