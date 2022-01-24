@@ -4,44 +4,50 @@ call plug#begin('~/.vim/plugged')
 " Make sure you use single quotes
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'wellle/context.vim'
 Plug 'tpope/vim-fugitive'
-"Plug 'liuchengxu/space-vim-dark'
 Plug 'whatyouhide/vim-gotham'
 Plug 'arcticicestudio/nord-vim'
-"Plug 'mswift42/vim-themes'
-"Plug 'rainglow/vim'
 Plug 'mhinz/vim-signify'
 
-Plug 'mhinz/vim-startify'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+Plug 'bfrg/vim-cpp-modern'
+
 Plug 'hari-rangarajan/CCTree'
+Plug 'skywind3000/gutentags_plus'
 Plug 'vivien/vim-linux-coding-style'
 Plug 'majutsushi/tagbar'
 
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-Plug 'rust-lang/rust.vim'
-
-Plug 'dense-analysis/ale'
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'Shougo/vimproc.vim'
-Plug 'liuchengxu/vista.vim'
 Plug 'rhysd/git-messenger.vim'
 Plug 'dag/vim-fish'
 Plug 'rhysd/vim-grammarous'
+Plug 'kamykn/spelunker.vim'
+Plug 'dhananjaylatkar/cscope_maps.nvim' " cscope keymaps
+Plug 'folke/which-key.nvim' " optional
+Plug 'jacoborus/tender.vim'
 
+Plug 'github/copilot.vim'
+Plug 'rust-lang/rust.vim'
+
+"Plug 'ycm-core/YouCompleteMe'
 " Initialize plugin system
 call plug#end()
 
-" enable ncm2 for all buffers
-"autocmd BufEnter * call ncm2#enable_for_buffer()
+"
+"'kamykn/spelunker.vim'
+set nospell
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+let g:spelunker_highlight_type = 1
+" Option to disable word checking.
+" Disable URI checking. (default: 0)
+let g:spelunker_disable_uri_checking = 1
+" end 'kamykn/spelunker.vim'
 
 " IMPORTANT: :help Ncm2PopupOpen for more information
 set completeopt=noinsert,menuone,noselect
@@ -50,72 +56,11 @@ set completeopt=noinsert,menuone,noselect
 set hidden
 "omni completion freeze
 let g:tsuquyomi_use_vimproc=1
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'python': ['/usr/local/bin/pyls'],
-    \ }
-let g:LanguageClient_diagnosticsSignsMax=0
-let g:LanguageClient_diagnosticsEnable=0
-let g:LanguageClient_diagnosticsList="Quickfix"
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 "popup menu color
 highlight Pmenu ctermbg=gray guibg=gray
 "transparent
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
-
-let g:startify_lists = [
-	\ { 'type': 'dir',       'header': ['   Most Recently Used Files '. getcwd()] },
-	\ { 'type': 'files',     'header': ['   Most Recently Used Files']            },
-	\ { 'type': 'sessions',  'header': ['   Sessions']       },
-	\ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-	\ { 'type': 'commands',  'header': ['   Commands']       },
-	\ ]
-let g:startify_enable_special      = 0
-let g:startify_files_number        = 8
-let g:startify_relative_path       = 1
-"let g:startify_change_to_dir       = 0
-"let g:startify_update_oldfiles     = 1
-"let g:startify_session_autoload    = 1
-"let g:startify_session_persistence = 1
-
-let g:startify_skiplist = [
-	\ 'COMMIT_EDITMSG',
-        \ 'bundle/.*/doc',
-        \ '/data/repo/neovim/runtime/doc',
-        \ '/Users/mhi/local/vim/share/vim/vim74/doc',
-        \ ]
-
-let g:startify_bookmarks = [
-        \ { 'c': '~/.vimrc' },
-        \ ]
-
-let g:startify_custom_header =
-	\ startify#pad(split(system('task|boxed'), '\n'))
-let g:startify_custom_footer =
-	\ ['', "   Vim is charityware. Please read ':help uganda'.", '']
-
-hi StartifyBracket ctermfg=240
-hi StartifyFile    ctermfg=147
-hi StartifyFooter  ctermfg=240
-hi StartifyHeader  ctermfg=114
-hi StartifyNumber  ctermfg=215
-hi StartifyPath    ctermfg=245
-hi StartifySlash   ctermfg=240
-hi StartifySpecial ctermfg=240
-
-"vimfiler settings
-let g:vimfiler_as_default_explorer = 1
-call vimfiler#custom#profile('default', 'context',{'direction' : 'rightbelow'})
-autocmd VimEnter *
-	\   if !argc()
-	\ |   Startify
-        \ |   VimFilerExplorer
-        \ |   wincmd w
-        \ | endif
 
 set showtabline=2
 let g:airline#extensions#branch#enabled = 1
@@ -128,13 +73,32 @@ let g:indentLine_color_gui = '#504945'
 let g:indentLine_char = '┊'
 "let g:indentLine_concealcursor = 'niv'
 "let g:indentLine_conceallevel = 2
-let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'vimfiler', 'json']
+let g:indentLine_fileTypeExclude = ['help', 'man', 'json']
 
-let g:ale_completion_enabled = 1
+" enable gtags module
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
+" generate datebases in my cache directory, prevent gtags files polluting my project
+let g:gutentags_cache_dir = expand('~/.cache/tags')
 
+" change focus to quickfix window after search (optional).
+let g:gutentags_plus_switch = 1
 
-colorscheme gotham256
-hi Comment cterm=italic
+let g:rustfmt_autosave = 1
+
+colorscheme tender
+"hi Comment cterm=italic
+" Disable function highlighting (affects both C and C++ files)
+let g:cpp_function_highlight = 0
+
+" Enable highlighting of C++11 attributes
+let g:cpp_attributes_highlight = 1
+
+" Highlight struct/class member variables (affects both C and C++ files)
+let g:cpp_member_highlight = 1
+
+" Put all standard C and C++ keywords under Vim's highlight group 'Statement'
+" (affects both C and C++ files)
+let g:cpp_simple_highlight = 1
 
 set autoindent smartindent              " turn on auto/smart indenting
 set smarttab                            " make <tab> and <backspace> smarter
@@ -155,7 +119,7 @@ set laststatus=2
 set undodir=~/.vimundo
 set undofile
 set wildmenu
-
+set encoding=utf-8
 augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)

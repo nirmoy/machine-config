@@ -53,7 +53,13 @@ function dec_to_hex
 	echo "ibase=A;obase=16; $argv"|bc
 end
 
-
+# config.fish
+if test -z (pgrep ssh-agent)
+  eval (ssh-agent -c)
+  set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
+  set -Ux SSH_AGENT_PID $SSH_AGENT_PID
+  set -Ux SSH_AUTH_SOCK $SSH_AUTH_SOCK
+end
 
 
 function bt
@@ -73,7 +79,7 @@ function ncp
 	end
 end
 
-set PATH $HOME/.cargo/bin ~/.local/bin $PATH
+set PATH $HOME/.cargo/bin ~/.local/bin $PATH /usr/local/bin
 
 
 if command -v exa > /dev/null
@@ -88,31 +94,14 @@ else
 end
 
 function fish_greeting
-	if type -q fish-welcome
-		fish-welcome; set_color normal #fish-welcome doesn't reset color
-	end
+	#if type -q fish-welcome
+	#	fish-welcome; set_color normal #fish-welcome doesn't reset color
+	#end
 	#if type -q task and type -q boxed
-	#		task|boxed
+	#			task|boxed
 	#end
 end
 
-source ~/.config/fish/functions/fish_prompt.fish
-source ~/.config/fish/functions/fish_title.fish
-source ~/.config/fish/completions/docker.fish
-
-set -g theme_display_git yes
-set -g theme_display_user ssh
-set -g theme_display_hostname ssh
-set -g theme_display_sudo_user yes
-set -g theme_display_vi no
-set -g theme_avoid_ambiguous_glyphs yes
-set -g theme_powerline_fonts yes
-set -g theme_nerd_fonts yes
-set -g theme_show_exit_status yes
-set -g theme_display_jobs_verbose yes
-set -g theme_display_jobs_verbose yes
-set -g default_user your_normal_user
-set -g theme_color_scheme zenburn
-set -g theme_project_dir_length 1
-set -g theme_newline_cursor no
-#set -g theme_title_use_abbreviated_path yes
+#source ~/.config/fish/functions/fish_title.fish
+#source ~/.config/fish/completions/docker.fish
+starship init fish | source

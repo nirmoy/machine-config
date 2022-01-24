@@ -7,7 +7,7 @@
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
-exec swaylock --screenshot --clock --indicator --effect-blur 7x5
+#exec swaylock --screenshot --clock --indicator --effect-blur 7x5
 set $mod Mod4
 # Home row direction keys, like vim
 set $left h
@@ -20,7 +20,7 @@ set $term kitty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 set $menu wofi --show drun -i
-
+#xwayland disable
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -35,10 +35,10 @@ set $menu wofi --show drun -i
 #
 # Example configuration:
 #
-exec swayidle -w \
-          timeout 300 'swaylock -f -c 000000' \
-          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-          before-sleep 'swaylock -f -c 000000'
+#exec swayidle -w \
+#          timeout 300 'swaylock -f -c 000000' \
+#          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+#          before-sleep 'swaylock -f -c 000000'
 set $screenshot grim ~/Pictures/screenshots/scrn-$(date +"%Y-%m-%d-%H-%M-%S").png
 set $screenclip slurp | grim -g - ~/Pictures/screenshots/scrn-grab-$(date +"%Y-%m-%d-%H-%M-%S").png
 
@@ -214,27 +214,41 @@ bar {
 assign [class="Hexchat"] workspace 3
 assign [class = "Chromium-browser"] workspace 1
 assign [app_id = "thunderbird"] workspace 2
+assign [app_id = "kitty"] workspace 2
 assign [class = "Steam"] workspace 4
 assign [class = "Microsoft Teams - Preview"] workspace 3
 assign [class = "Hexchat"] workspace 3
 assign [title = "Counter-Strike: Global Offensive - OpenGL"] workspace 4
 assign [title = "Dota 2"] workspace 4
 
-output HDMI-A-1 transform 270 position 0 0
+#output HDMI-A-1 transform 270 position 0 0
+for_window [app_id="kitty"] focus, split h
+for_window [class = "Chromium-browser"] focus, split v
+
 workspace 1 output DP-2
 workspace 2 output HDMI-A-1
 workspace 3 output DP-2
 workspace 4 output DP-2
 workspace 5 output HDMI-A-1
 
+#output HDMI-A-1 disable
+
 exec  kitty
-exec  chromium
-exec  teams
-exec  thunderbird
+exec  flatpak run org.chromium.Chromium
+#exec  teams
+#exec  thunderbird
 exec  hexchat
 exec  mako
+#exec_always pydoro
+exec /usr/libexec/polkit-gnome-authentication-agent-1
 
 bindsym Print exec  $screenshot
 bindsym Shift+Print exec $screenclip
+
+default_border pixel 3
+default_floating_border pixel 3
+
+#pydoro
+for_window [title="Pomatez"] floating enable, resize set width 500 px height 500 px, move position 3350px 1650px
 
 include /etc/sway/config.d/*
