@@ -3,6 +3,10 @@ Required packages
 ```
 sudo zypper in git make gcc cargo fish kitty taskwarrior
 sh ./install_firacode_font.sh
+sudo zypper in -y gcc-c++ llvm-devel libvdpau-devel glslang-devel cmake python310-devel python310-Mako libd
+rm-devel libxshmfence-devel libXxf86vm-devel libxml2-devel libjson-c-devel cairo-devel pango-devel libevdev-devel systemd-devel
+ graphviz doxygen libxslt xmlto libinput-devel
+
 
 ```
 Disable Sleep
